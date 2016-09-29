@@ -1,4 +1,4 @@
-angular-indexedDB
+angular-indexedDB 0.0.1
 =================
 
 An angularjs serviceprovider to utilize indexedDB with angular

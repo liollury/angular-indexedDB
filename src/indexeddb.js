@@ -208,7 +208,7 @@ angular.module('xc.indexedDB', []).provider('$indexedDB', function() {
                             req.onnotify = function(e) {
                                $rootScope.$apply(function(){
                                     d.notify(e.target.result);
-                                }); 
+                                });
                             }
                             req.onerror = function(e) {
                                 $rootScope.$apply(function(){
@@ -257,7 +257,7 @@ angular.module('xc.indexedDB', []).provider('$indexedDB', function() {
                             req.onnotify = function(e) {
                                $rootScope.$apply(function(){
                                     d.notify(e.target.result);
-                                }); 
+                                });
                             }
                             req.onerror = function(e) {
                                 $rootScope.$apply(function(){
@@ -431,8 +431,9 @@ angular.module('xc.indexedDB', []).provider('$indexedDB', function() {
              * and QueryBuilder for details
              * @returns {object} IDBCursor ...wrapped in a promise
              */
-            "each": function(callback, options){
-                var d = $q.defer();
+            "each": function(options){
+                var d = $q.defer(),
+                    results = [];
                 return this.internalObjectStore(this.storeName, READWRITE).then(function(store){
                    var req;
                    options = options || defaultQueryOptions;
@@ -441,13 +442,19 @@ angular.module('xc.indexedDB', []).provider('$indexedDB', function() {
                     } else {
                         req = store.openCursor(options.keyRange, options.direction);
                     }
-                    req.onsuccess = req.onerror = function(e) {
-                        $rootScope.$apply(function(){
-                            if(!e.target.result){
-                                d.resolve(e.target.result);
-                            }
-                            callback(e.target.result);
-                        });
+                    req.onsuccess = function(e) {
+                        var cursor = e.target.result;
+                        if(cursor){
+                            results.push(cursor.value);
+                            cursor.continue();
+                        } else {
+                            $rootScope.$apply(function(){
+                                d.resolve(results);
+                            });
+                        }
+                    };
+                    req.onerror = function(e) {
+                        d.reject(e.target.result);
                     };
                     return d.promise;
                 });
