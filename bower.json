@@ -1,12 +1,12 @@
 {
   "name": "angular-indexedDB",
   "version": "0.0.1",
-  "homepage": "https://github.com/bramski/angular-indexedDB",
+  "homepage": "https://github.com/liollury/angular-sortable-view.git",
   "authors": [
     "webcss <webcss@capitain-reinigung.de>"
   ],
   "description": "An angularjs serviceprovider to utilize indexedDB with angular",
-  "main": "src/indexeddb.js",
+  "main": "./src/indexeddb.js",
   "keywords": [
     "angularjs",
     "indexeddb",
